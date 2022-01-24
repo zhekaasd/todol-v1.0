@@ -1,0 +1,24 @@
+
+.error {
+    border: 2px solid red;
+}
+
+.errorMsg {
+    color: red;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+
+
+
+.isDone {
+    opacity: .4;
+}
+
+
+.todoSpan {
+  font-size: 20px;
+  font-weight: 700;
+}
+
