@@ -6,14 +6,15 @@ import {Clear} from "@mui/icons-material";
 import {pink} from "@mui/material/colors";
 
 type EditableSpanType = {
-    nameButton: string
     title: string
     spanClassName?: string
     changeTitle: (newTitle: string) => void
     removeItem: () => void
 
 }
-const EditableSpan: React.FC<EditableSpanType> = ({nameButton, title, spanClassName, changeTitle, removeItem}) => {
+const EditableSpan: React.FC<EditableSpanType> = React.memo(({title, spanClassName, changeTitle, removeItem}) => {
+
+    console.log('EditableSpan is called!');
 
     let [editMode, setEditMode] = useState<boolean>(false);
     let [titleValue, setTitleValue] = useState<string>(title);
@@ -39,14 +40,14 @@ const EditableSpan: React.FC<EditableSpanType> = ({nameButton, title, spanClassN
     }
 
     /*  */
-     return editMode ? <TextField  onChange={onChangeHandler} value={titleValue} autoFocus onBlur={editDeactivatedMode}  size={'small'} />
-         : <>
+    return editMode ? <TextField  onChange={onChangeHandler} value={titleValue} autoFocus onBlur={editDeactivatedMode}  size={'small'} />
+        : <>
             <span className={spanClassName ? spanClassName : s.taskSpan}  onDoubleClick={editActiveMode}>{title}</span>
 
-             <IconButton onClick={removeItem}>
-                 <Clear  fontSize={'medium'} sx={{ color: '#F58F7C' }} />
-             </IconButton>
-         </>
-}
+            <IconButton onClick={removeItem}>
+                <Clear  fontSize={'medium'} sx={{ color: '#F58F7C' }} />
+            </IconButton>
+        </>
+})
 
 export default EditableSpan;

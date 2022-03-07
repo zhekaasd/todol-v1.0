@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useCallback, useState} from "react";
 import {FilterType, TasksType} from "./App";
 
 import s from "./todolist.module.css";
@@ -41,18 +41,31 @@ const theme = createTheme({
 });
 
 function Todolist(props: TodolistPropsType) {
+    console.log('Todolist is called!');
+
+
+    let tasks = props.tasks;
+
+    if (props.filter === 'active') {
+        tasks = tasks.filter( t => !t.isDone);
+    }
+
+    if (props.filter === 'completed') {
+        tasks = tasks.filter( t => t.isDone );
+    }
+
 
     const addTask = (value: string) => {
       props.addTask(props.id, value);
     }
 
-    const changeTdlsTitle = (newTitle: string) => {
+    const changeTdlsTitle = useCallback((newTitle: string) => {
         props.changeTodolistTitle(newTitle, props.id);
-    }
+    }, [props.changeTodolistTitle, props.id]);
 
-    const removeTdlst = () => {
+    const removeTdlst = useCallback( () => {
         props.removeTodolist(props.id);
-    }
+    }, [props.removeTodolist, props.id]);
 
 
     const onAllClickHandler = () => {props.filteredTask(props.id, 'all');}
@@ -65,7 +78,6 @@ function Todolist(props: TodolistPropsType) {
             <EditableSpan
                 title={props.title}
                 //spanClassName={styles.todoSpan}
-                nameButton={'del'}
                 changeTitle={changeTdlsTitle}
                 removeItem={removeTdlst}
             />
@@ -73,7 +85,7 @@ function Todolist(props: TodolistPropsType) {
         <AddItemForm addItem={addTask}  />
         <div style={{marginLeft: '0', paddingLeft: '0'}}>
             {
-                props.tasks.map((t) => {
+                tasks.map((t) => {
 
                     const changeTitle = (newTitle: string) => {
                       props.changeTaskTitle(newTitle, props.id, t.id);
@@ -84,15 +96,20 @@ function Todolist(props: TodolistPropsType) {
             }
         </div>
         <div>
-            // Button to custom color
             {/*<ThemeProvider theme={theme}>*/}
             {/*    <Button color={'primary'} size={'small'} variant={'contained'} className={props.filter === 'all' ? styles.active : ''} onClick={onAllClickHandler} > All </Button>*/}
             {/*    <Button size={'small'} variant={'contained'} className={props.filter === 'active' ? styles.active : ''} onClick={onActiveClickHandler} > Active </Button>*/}
             {/*    <Button size={'small'} variant={'contained'} className={props.filter === 'completed' ? styles.active : ''} onClick={onCompletedHandler} > Completed </Button>*/}
             {/*</ThemeProvider>*/}
-            <Button size={'small'} color={"success"} variant={props.filter === 'all' ? 'contained' : 'outlined'}  onClick={onAllClickHandler} > All </Button>
-            <Button size={'small'} color={'secondary'} variant={props.filter === 'active' ? 'contained' : 'outlined'}  onClick={onActiveClickHandler} > Active </Button>
-            <Button size={'small'} color={'primary'} variant={props.filter === 'completed' ? 'contained' : 'outlined'}  onClick={onCompletedHandler} > Completed </Button>
+
+            {
+                props.tasks.length > 0 ? <>
+                    <Button size={'small'} color={"success"} variant={props.filter === 'all' ? 'contained' : 'outlined'}  onClick={onAllClickHandler} > All </Button>
+                    <Button size={'small'} color={'secondary'} variant={props.filter === 'active' ? 'contained' : 'outlined'}  onClick={onActiveClickHandler} > Active </Button>
+                    <Button size={'small'} color={'primary'} variant={props.filter === 'completed' ? 'contained' : 'outlined'}  onClick={onCompletedHandler} > Completed </Button>
+                </> : ''
+            }
+
         </div>
     </div>
 }

@@ -21,7 +21,7 @@ const Task: React.FC<TaskPropsType> = ({t, id, changeTitle, changeChecked, remov
         <Checkbox size={"small"} checked={t.isDone} onChange={() => {
             changeChecked(id ,t.id, !t.isDone);
         }} />
-        <EditableSpan title={t.title} nameButton={'x'}  changeTitle={changeTitle} removeItem={removeTaskItem} />
+        <EditableSpan title={t.title}  changeTitle={changeTitle} removeItem={removeTaskItem} />
     </div>
 }
 

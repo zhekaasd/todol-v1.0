@@ -27,6 +27,7 @@ const theme = createTheme({
 
 const AddItemForm = (props: AddItemFormType) => {
 
+    console.log('AddItemForm is called!');
 
     let [error, setError] = useState<boolean>(false);
     let [currentValue, setCurrentValue] = useState('');
@@ -60,8 +61,13 @@ const AddItemForm = (props: AddItemFormType) => {
 
         {/* label={error ? 'Field is not correct!' : 'Send text..'} */}
 
-        <TextField helperText={error ? 'Field is not correct!' : ''} size={'small'} label={error ? 'Field is not correct!' : 'Send text..'} error={error} variant={"outlined"} onKeyPress={onKeyPressHandler}
-                   onChange={onChangeHandler} value={currentValue} />
+        <TextField helperText={error ? 'Field is not correct!' : ''}
+                   size={'small'} label={error ? 'Field is not correct!' : 'Send text..'}
+                   error={error} variant={"outlined"}
+                   onKeyPress={onKeyPressHandler}
+                   onChange={onChangeHandler}
+                   value={currentValue}
+        />
 
 
         {/*<button onClick={addTaskHandler}>+</button>*/}
@@ -70,7 +76,8 @@ const AddItemForm = (props: AddItemFormType) => {
         {/*</ThemeProvider>*/}
 
         <IconButton>
-            <AddCircle sx={{color: pink[500]}} />
+            <AddCircle
+                onClick={addTaskHandler} sx={{color: pink[500]}} />
         </IconButton>
 
         {/*{error && <div className={styles.errorMsg}> Field is not correct! </div> }*/}

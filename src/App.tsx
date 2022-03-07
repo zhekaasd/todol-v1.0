@@ -7,6 +7,7 @@ import AddItemForm from "./AddItemForm";
 import {AppBar, Box, Button, Container, Grid, IconButton, ThemeProvider, Toolbar, Typography} from "@mui/material";
 import { Menu } from '@mui/icons-material';
 import {createTheme} from "@mui/material/styles";
+import {InitialTodolistsStateType} from "./state/todolists-reducer";
 
 export type TaskType = {id: string, title: string, isDone: boolean};
 export type TasksType = Array<TaskType>;
@@ -17,7 +18,8 @@ export type TodolistType = {
     title: string
     filter: FilterType
 }
-export type TodolistsType = Array<TodolistType>;
+
+// export type TodolistsType = Array<TodolistType>;
 
 
 const theme = createTheme({
@@ -37,14 +39,10 @@ function App() {
     const todolistId1 = v1();
     const todolistId2 = v1();
 
-    let [todolists, setTodolists] = useState<TodolistsType>([
+    let [todolists, setTodolists] = useState<InitialTodolistsStateType>([
         {id: todolistId1, title: 'todo 1', filter: 'all'},
         {id: todolistId2, title: 'todo 2', filter: 'all'}
     ]);
-
-
-
-
 
     let [tasks1, setTasks1] = useState<{[key: string]: TasksType}>({
             [todolistId1]: [
@@ -59,13 +57,6 @@ function App() {
             ]
         }
     );
-
-
-
-
-
-
-
 
     function removeTask(todolistId: string, id: string) {
         tasks1[todolistId] = tasks1[todolistId].filter( t => t.id !== id);
@@ -95,7 +86,6 @@ function App() {
         setTasks1({...tasks1});
     }
 
-
     function addTdlst(title: string) {
         const todolistId = v1();
         setTodolists([{id: todolistId, title, filter: 'all'} , ...todolists]);
@@ -108,7 +98,6 @@ function App() {
         delete tasks1[id];
         setTasks1({...tasks1});
     }
-
 
     function changeTodolistTitle(newTitle: string, id: string) {
         let todolist = todolists.find( td => td.id === id);
