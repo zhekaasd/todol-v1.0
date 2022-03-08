@@ -52,6 +52,7 @@ const theme = createTheme({
 
 function AppWithRedux() {
 
+    console.log('AppWithRedux is called');
 
 
     const tasks1 = useSelector<AppStoreType, InitialTasksStateType>((state) => state.tasks);
@@ -82,12 +83,12 @@ function AppWithRedux() {
 
 
 
-    function removeTask(todolistId: string, id: string) {
+    const removeTask = useCallback(function(todolistId: string, id: string) {
         //tasks1[todolistId] = tasks1[todolistId].filter( t => t.id !== id);
         //setTasks1({...tasks1});
 
         dispatch(removeTaskAC(todolistId, id));
-    }
+    }, []);
 
     const addTask = useCallback((todolistId: string ,title: string) => {
         // tasks1[todolistId] = [{id: v1(), title: title, isDone: false}, ...tasks1[todolistId]];
@@ -97,15 +98,15 @@ function AppWithRedux() {
         dispatch(addTaskAC(todolistId, title));
     }, []);
 
-    function changeChecked(todolistId:string ,id: string, newValue: boolean) {
+    const changeChecked = useCallback(function(todolistId:string ,id: string, newValue: boolean) {
         // tasks1[todolistId] = tasks1[todolistId].map( t => t.id !== id ? t : {...t, isDone: newValue});
         // setTasks1({...tasks1});
         // // setTasks1( tasks1.map( t => t.id !== id ? t : {...t, isDone: newValue}) );
 
         dispatch(changeTaskStatus(todolistId, id, newValue));
-    }
+    }, []);
 
-    function changeTaskTitle(newTitle: string, todolistId: string, id: string) {
+    const changeTaskTitle = useCallback(function(newTitle: string, todolistId: string, id: string) {
         // let task = tasks1[todolistId].find( t => t.id === id);
         // if (task) {
         //     task.title = newTitle;
@@ -114,7 +115,7 @@ function AppWithRedux() {
         // setTasks1({...tasks1});
 
         dispatch(updateTaskTitleAC(todolistId, id, newTitle));
-    }
+    }, []);
 
     const addTdlst = useCallback((title: string) => {
             // const todolistId = v1();
@@ -136,7 +137,7 @@ function AppWithRedux() {
         dispatch(removeTodolistAC(id));
     }, [])
 
-    function changeTodolistTitle(newTitle: string, id: string) {
+    const changeTodolistTitle = useCallback(function(newTitle: string, id: string) {
         // let todolist = todolists.find( td => td.id === id);
         // if(todolist) {
         //     todolist.title = newTitle;
@@ -144,9 +145,9 @@ function AppWithRedux() {
         // setTodolists([...todolists]);
 
         dispatch(changeTodolistTitleAC(id, newTitle));
-    }
+    }, []);
 
-    function filteredTask(id: string, filter: FilterType) {
+    const filteredTask = useCallback(function(id: string, filter: FilterType) {
         // let tdl = todolists.find(td => td.id === todolistId);
         // if(tdl) {
         //     tdl.filter = value;
@@ -156,7 +157,7 @@ function AppWithRedux() {
 
         dispatch(filteredTodolistTasksAC(id, filter));
 
-    }
+    }, []);
 
 
     return (

@@ -86,4 +86,4 @@ const AddItemForm = (props: AddItemFormType) => {
 
 
 
-export default AddItemForm;
+export default React.memo(AddItemForm);

@@ -47,17 +47,17 @@ function Todolist(props: TodolistPropsType) {
     let tasks = props.tasks;
 
     if (props.filter === 'active') {
-        tasks = tasks.filter( t => !t.isDone);
+        tasks = props.tasks.filter( t => !t.isDone);
     }
 
     if (props.filter === 'completed') {
-        tasks = tasks.filter( t => t.isDone );
+        tasks = props.tasks.filter( t => t.isDone );
     }
 
 
-    const addTask = (value: string) => {
-      props.addTask(props.id, value);
-    }
+    const addTask = useCallback((value: string) => {
+        props.addTask(props.id, value);
+    }, []);
 
     const changeTdlsTitle = useCallback((newTitle: string) => {
         props.changeTodolistTitle(newTitle, props.id);
@@ -68,9 +68,9 @@ function Todolist(props: TodolistPropsType) {
     }, [props.removeTodolist, props.id]);
 
 
-    const onAllClickHandler = () => {props.filteredTask(props.id, 'all');}
-    const onActiveClickHandler = () => {props.filteredTask(props.id, 'active');}
-    const onCompletedHandler = () => {props.filteredTask(props.id, 'completed');}
+    const onAllClickHandler = useCallback(() => {props.filteredTask(props.id, 'all');}, [props.filteredTask, props.id]);
+    const onActiveClickHandler = useCallback(() => {props.filteredTask(props.id, 'active')}, [props.filteredTask, props.id]);
+    const onCompletedHandler = useCallback(() => {props.filteredTask(props.id, 'completed');}, [props.filteredTask, props.id]);
 
 
     return <div>
@@ -87,11 +87,8 @@ function Todolist(props: TodolistPropsType) {
             {
                 tasks.map((t) => {
 
-                    const changeTitle = (newTitle: string) => {
-                      props.changeTaskTitle(newTitle, props.id, t.id);
-                    }
 
-                    return <Task t={t} key={t.id} id={props.id} removeTask={props.removeTask} changeChecked={props.changeChecked} changeTitle={changeTitle} />
+                    return <Task t={t} key={t.id} id={props.id} removeTask={props.removeTask} changeChecked={props.changeChecked} changeTaskTitle={props.changeTaskTitle} />
                 })
             }
         </div>
@@ -114,4 +111,4 @@ function Todolist(props: TodolistPropsType) {
     </div>
 }
 
-export default Todolist;
+export default React.memo(Todolist);

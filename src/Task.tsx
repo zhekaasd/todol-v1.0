@@ -1,29 +1,34 @@
 import styles from "./todolist.module.css";
 import EditableSpan from "./EditableSpan";
-import React from "react";
+import React, {useCallback} from "react";
 import {TaskType} from "./App";
 import {Checkbox} from "@mui/material";
 
 type TaskPropsType = {
     t: TaskType
     id: string
-    changeTitle: (newTitle: string) => void
+    changeTaskTitle: (newTitle: string, todolistId: string, id: string) => void
     changeChecked: (todolistId: string, id: string, newValue: boolean) => void
     removeTask: (id: string, todolistId: string) => void
 }
-const Task: React.FC<TaskPropsType> = ({t, id, changeTitle, changeChecked, removeTask}) => {
+const Task: React.FC<TaskPropsType> = ({t, id, changeTaskTitle, changeChecked, removeTask}) => {
+    console.log('task is called')
 
-    const removeTaskItem = () => {
+    const removeTaskItem = useCallback(() => {
         removeTask(id, t.id);
-    }
+    }, [id, t.id, removeTask]);
+
+    const changeTitleItem = useCallback((newTitle: string) => {
+        changeTaskTitle(newTitle, id, t.id);
+    }, [t.id, id, changeTaskTitle]);
+
+    const changeCheckboxHandler = useCallback(() => {changeChecked(id ,t.id, !t.isDone)}, [changeChecked, t.id, t.isDone, id]);
 
     return <div  style={{listStyleType: "none"}} className={t.isDone ? styles.isDone : ''} >
-        <Checkbox size={"small"} checked={t.isDone} onChange={() => {
-            changeChecked(id ,t.id, !t.isDone);
-        }} />
-        <EditableSpan title={t.title}  changeTitle={changeTitle} removeItem={removeTaskItem} />
+        <Checkbox size={"small"} checked={t.isDone} onChange={changeCheckboxHandler} />
+        <EditableSpan title={t.title}  changeTitle={changeTitleItem} removeItem={removeTaskItem} />
     </div>
 }
 
 
-export default Task;
+export default React.memo(Task);
